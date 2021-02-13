@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+
+namespace Rextester
+{
+    public class Program
+    {
+        
+            
+        public static void Main(string[] args)
+        {
+            //Your code goes here
+            double[] r1_pos={0,0,0};
+            double[] r2_pos={1,1,1};
+       
+          
+            Console.WriteLine("Distance bewteen particles: "+distance(r1_pos,r2_pos));
+            Console.WriteLine("Potential between partciels: "+ potential_func(r1_pos,r2_pos));
+            //Console.WriteLine("Derivation of Potential between partciels: "+ derivation_with_domain(potential_func,r1_pos,r2_pos,1));
+            Console.WriteLine("Complete derivation of potential "+ complete_derivation(potential_func,r1_pos,r2_pos));
+            
+           
+            
+             double potential_func(double[] particle1 ,double[] particle2){
+                 double pot_const=5;
+                return pot_const*1/distance(particle1,particle2);
+            }
+
+            
+             double distance(double[] particle1,double[] particle2){
+                
+                  double non_square=(particle1[0]-particle2[0])*(particle1[0]-particle2[0])+(particle1[1]-particle2[1])*(particle1[1]-particle2[1])+(particle1[2]-particle2[2])*(particle1[2]-particle2[2]);
+                  return Math.Sqrt(non_square);
+            }
+            
+            
+             double derivation_with_domain(Func<double[], double[], double > any_function, double[] particle1, double[] particle2,int domain_index){
+                  double h=0.000001;
+                  double null_part=any_function(particle1,particle2);
+                  double[]   changed_pos_particle={particle2[0],particle2[1],particle2[2]};
+                      
+                  changed_pos_particle[domain_index]=particle2[domain_index]+h;
+                  double changed_part=any_function(particle1,changed_pos_particle);
+                 
+                  double derivation = (changed_part-null_part)/h;
+                  return derivation;
+            }
+            
+            double complete_derivation(Func<double[], double[], double > any_function, double[] particle1, double[] particle2){
+                double derivation_sum=0;
+                for (int i=0;i<=2;i++){
+                    derivation_sum+=derivation_with_domain(any_function,particle1,particle2,i);
+                }
+                
+                return derivation_sum;
+            }
+         
+            
+        }
+    }
+}
