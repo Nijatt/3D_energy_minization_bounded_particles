@@ -1,3 +1,6 @@
+//Rextester.Program.Main is the entry point for your code. Don't change it.
+//Microsoft (R) Visual C# Compiler version 2.9.0.63208 (958f2354)
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +16,32 @@ namespace Rextester
         {
             //Your code goes here
             double[] r1_pos={0,0,0};
-            double[] r2_pos={1,1,1};
+            double[] r2_pos={0.5,0.5,10};
        
           
             Console.WriteLine("Distance bewteen particles: "+distance(r1_pos,r2_pos));
             Console.WriteLine("Potential between partciels: "+ potential_func(r1_pos,r2_pos));
             //Console.WriteLine("Derivation of Potential between partciels: "+ derivation_with_domain(potential_func,r1_pos,r2_pos,1));
             Console.WriteLine("Complete derivation of potential "+ complete_derivation(potential_func,r1_pos,r2_pos));
-            
+            search_algorithm();
            
+            void search_algorithm(){
+                // verlet integration of newton rapson method will be used.
+                for(int i=0;i<=10;i++){
+                    Console.WriteLine("Distance bewteen particles: "+distance(r1_pos,r2_pos));
+                }
+            }
+            
             
              double potential_func(double[] particle1 ,double[] particle2){
-                 double pot_const=5;
-                return pot_const*1/distance(particle1,particle2);
+                 double rep_const=0.1;
+                 double attr_const=1;
+                 double potential=5;
+                 // repulsion is a positive interaction
+                 double repulsion= rep_const*1/distance(particle1,particle2);
+                 // attraction is a negative interaction
+                 double attraction = -attr_const*1/distance(particle1,particle2);
+                    return attraction+repulsion;
             }
 
             
@@ -46,6 +62,7 @@ namespace Rextester
                  
                   double derivation = (changed_part-null_part)/h;
                   return derivation;
+                   //0.0004;
             }
             
             double complete_derivation(Func<double[], double[], double > any_function, double[] particle1, double[] particle2){
